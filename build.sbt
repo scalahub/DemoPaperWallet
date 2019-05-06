@@ -19,4 +19,7 @@ libraryDependencies += "commons-io" % "commons-io" % "2.6"
 // https://mvnrepository.com/artifact/org.json/json
 libraryDependencies += "org.json" % "json" % "20140107"
 
+// TESTING LIBS
+// https://mvnrepository.com/artifact/org.bitcoinj/bitcoinj-core
+libraryDependencies += "org.bitcoinj" % "bitcoinj-core" % "0.14.7" % Test
 
