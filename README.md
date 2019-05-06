@@ -2,36 +2,42 @@
 
 CryptoNode is a cryptocurrency library written in Scala. It can be used for implementing nodes and wallets for Bitcoin and its related forks. It supports SPV mode out of the box and can be converted to a full node by implementing the core consensus rules and the execution engine. It supports the Secp256k1 elliptic curve used in Bitcoin and its forks. 
 
-## What is supported?
-### Bitcoin
-- Signing transactions and address generation
--- SegWit (P2SH-P2WPKH) 
--- P2SH-P2PK
--- P2PKH
-- Node connectivity 
--- Listen for blocks and transactions
--- Broadcast transaction
--- Supports all network commands in Bitcoin
-- SPV Mode 
--- Merkle Blocks 
--- Bloom filters
-- Local Bitcoind connectivity
--- RPC
--- Blockchain database parser (to reuse bitcoind chain)
-### BitcoinCash 
-- Signing transactions and address generation
--- P2PKH
-- Node connectivity
--- Listen for blocks and transactions
--- Broadcast transaction
+## Currently supported features
 
-### What is planned?
+### Bitcoin
+
+- Signing transactions and address generation:
+  - SegWit (P2SH-P2WPKH) 
+  - P2SH-P2PK
+  - P2PKH
+- Node connectivity:
+  - Listen for blocks and transactions
+  - Broadcast transaction
+  - All network commands in Bitcoin
+- SPV Mode: 
+  - Merkle Blocks 
+  - Bloom filters
+- Local Bitcoind connectivity:
+  - RPC
+  - Blockchain database parser (to reuse bitcoind chain)
+
+### BitcoinCash 
+
+- Signing transactions and address generation
+  - P2PKH
+- Node connectivity
+  - Listen for blocks and transactions
+  - Broadcast transaction
+
+## Future additions planned
+
 - Bitcoin consensus rules
 - ZCash with t-address
 - Bitcoin Bech32 address 
 - BitcoinCash CashAddr (bech32)
 - Consensus rules and chain validation
 
+## Usage 
 Please refer to the tests for example usage:
 https://github.com/scalahub/CryptoNode/tree/master/src/test/scala/org/sh/cryptonode
 
@@ -69,3 +75,5 @@ val signed = p2sh_key.signTx_P2SH_P2PK(tx2, Seq(3, 4)) // inputs 3, 4 are P2SH_P
 // above is a byte array encoding the raw Tx
 val parsed = new TxParser(signed).getTx // creates a Tx object
 ```
+## Acknowledgements
+Thanks to Arubi from #bitcoin-dev (Freenode) for providing several test vectors.
