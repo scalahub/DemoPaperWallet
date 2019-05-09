@@ -6,9 +6,16 @@ import org.sh.cryptonode.ecc.ECCPrvKey
 import org.sh.cryptonode.util.HashUtil
 
 object PaperWallet {
-
-  /* EXPERIMENTAL WALLET: Do not use for storing real funds. Use only for testnet coins
-   *
+  /* INSTRUCTIONS TO RUN: 
+   *   First create a fat jar using sbt
+   *     sbt_prompt> test:assemble
+   *   This will create a jar target/scala-2.12/CryptoNode-assembly-0.1.jar 
+   *   Then run the jar as follows:
+   *     java -cp target/scala-2.12/CryptoNode-assembly-0.1.jar org.sh.cryptonode.PaperWallet -a topSecretSeed 2022 correct horse battery staple
+   *  
+   *   (In the above command, the seed is topSecretSeed, the start index is 2022 and the words are correct horse battery staple)
+   */
+  /* EXPERIMENTAL WALLET: Do not use for storing real funds. Use only for testnet coins.
    * Takes as input:
    * 1. Option to output ordinary address (-a), segwit address (-s) or private key (-p)
    * 3. Seed
