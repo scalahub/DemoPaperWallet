@@ -23,3 +23,6 @@ libraryDependencies += "org.json" % "json" % "20140107"
 // https://mvnrepository.com/artifact/org.bitcoinj/bitcoinj-core
 libraryDependencies += "org.bitcoinj" % "bitcoinj-core" % "0.14.7" % Test
 
+// https://stackoverflow.com/a/34910525/243233
+Project.inConfig(Test)(baseAssemblySettings)
+// assemblyJarName in (Test, assembly) := s"${name.value}-test-${version.value}.jar"

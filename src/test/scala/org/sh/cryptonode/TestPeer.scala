@@ -14,15 +14,16 @@ import org.sh.cryptonode.ecc.Util._
 import org.sh.cryptonode.util.HashUtil._
 
 object TestPeer extends App {
-  isMainNet = false // set to true for main net (default)
+  isMainNet = true // set to true for main net (default)
+  // Peer.debug = false // prints a lot of info
   Peer.debug = true // prints a lot of info
 
   val node = new BitcoinSNode(isMainNet)
   // Below shows how to add handlers for events (block or tx received)
   node.addOnTxHandler("myTxHandler", tx => println(s"[tx] $tx"))
-  node.addOnBlkHandler("myBlkHandler", blk => println(s"[blk] $blk"))
+  node.addOnBlkHandler("myBlkHandler", blk => println(s"\n[blk] $blk"))
 
-  node.connectTo("localhost", false) // connect to given node (false implies disable tx relay)
+  //node.connectTo("localhost", false) // connect to given node (false implies disable tx relay)
   node.connectToAllSeeds(true) // connect to seed nodes (false implies disable tx relay)
 
   Thread.sleep(10000) // wait for connnect 10 secs
@@ -46,7 +47,7 @@ object TestPeer extends App {
 }
 
 object TestUAHFPeer extends App {
-  isMainNet = false
+  isMainNet = true
   Peer.debug = true
   val node = new BitcoinCashSNode(isMainNet)
   node.connectToAllSeeds(true)  

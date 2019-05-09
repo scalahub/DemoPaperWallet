@@ -83,14 +83,18 @@ class Peer(peerGroup:ActorRef, config:PeerConfig) extends Actor {
     command match {
       case `getDataCmd` | `notFoundCmd` => peerGroup ! (command, new InvPayloadParser(bytes).inv)
       case `getAddrCmd` | `verAckCmd` => peerGroup ! command
-      case `rejectCmd` => peerGroup ! new RejectPayloadParser(bytes).rej
-      case `invCmd` => peerGroup ! new InvPayloadParser(bytes).inv
+      case `rejectCmd` =>
+        peerGroup ! new RejectPayloadParser(bytes).rej
+      case `invCmd` =>
+        peerGroup ! new InvPayloadParser(bytes).inv
       case `addrCmd` => peerGroup ! new AddrPayloadParser(bytes).addr 
       case `versionCmd` => 
         if (new VersionPayloadParser(bytes).version.version.int32 >= config.version) 
           sender ! VerAckMsg 
-      case `pingCmd` => sender ! PongMsg(new PingPayloadParser(bytes).ping)
-      case `txCmd` => peerGroup ! new TxParser(bytes.toArray).getTx
+      case `pingCmd` =>
+        sender ! PongMsg(new PingPayloadParser(bytes).ping)
+      case `txCmd` =>
+        peerGroup ! new TxParser(bytes.toArray).getTx
       case `blockCmd` => peerGroup ! new BlockParser(bytes.toArray).getBlock 
       case `alertCmd` => // ignore 
       case cmd => println(s"Unhandled command $cmd") // do nothing for now        

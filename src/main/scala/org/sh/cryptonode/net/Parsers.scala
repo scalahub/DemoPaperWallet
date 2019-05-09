@@ -2,22 +2,20 @@
 package org.sh.cryptonode.net
 
 import akka.util.ByteString
-import org.sh.cryptonode.btc.BitcoinS._
-import org.sh.cryptonode.util.StringUtil._
-import org.sh.cryptonode.net.DataStructures._
-import org.sh.cryptonode.net.Parsers.RejectPayloadParser
-import org.sh.cryptonode.util.BytesUtil._
 import org.sh.cryptonode.btc.BlockHeaderParser
-import org.sh.cryptonode.ecc.Util._
+import org.sh.cryptonode.net.DataStructures._
+import org.sh.cryptonode.net.NetUtil._
+import org.sh.cryptonode.net.Payloads._
+import org.sh.cryptonode.util.BytesUtil._
 import org.sh.cryptonode.util.HashUtil._
-import org.sh.cryptonode.btc.BitcoinUtil._
-import NetUtil._
-import Payloads._
 
 object Parsers {
   
-  class MsgParser(magicBytes:Array[Byte], val bytes:ByteString) {
-    val result:Option[(P2PHeader, Option[ByteString])] = new HeaderParser(magicBytes, bytes).header.map(h => (h, new PayloadParser(bytes.drop(headerLen).take(h.payloadLen), h).result))
+  class MsgParser(magicBytes:Array[Byte], val bytesString:ByteString) {
+    val result:Option[(P2PHeader, Option[ByteString])] =
+      new HeaderParser(magicBytes, bytesString).header.map(
+        h => (h, new PayloadParser(bytesString.drop(headerLen).take(h.payloadLen), h).result)
+      )
   }
   
   class HeaderParser(magicBytes:Array[Byte], bytes:ByteString) extends AbstractNetParser(bytes.toArray) {
@@ -33,7 +31,7 @@ object Parsers {
     // require (bytes.size <= header.payloadLen) // sanity check for testing
     private val validSize = bytes.size == header.payloadLen
     private val validCheckSum = validSize && header.checkSumHex == dsha256(bytes).take(4).encodeHex
-    val result = if (validCheckSum) Some(bytes) else None
+    val result:Option[ByteString] = if (validCheckSum) Some(bytes) else None
     // require(validSize == validCheckSum) // sanity check for testing. If this fails then we are getting invalid packet. We would need to deal with them
   }
   
@@ -79,6 +77,8 @@ Code	Description
     override def toString = s"Reject:$msg:$code:$reason:${details.toArray.reverse.encodeHex}"
   }
 /*
+
+
 reject version codes
 Codes generated during the intial connection process in response to a "version" message:
 

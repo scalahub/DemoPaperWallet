@@ -16,7 +16,7 @@ abstract class AbstractParser(bytes:Array[Byte]) {
   
   protected def incrCtr(int:Int) = currCtr += int 
   
-  def getNextBytes(int:Int) = (1 to int).map(i => bytes(getAndIncrCtr)) 
+  def getNextBytes(int:Int) = (1 to int).map(i => bytes(getAndIncrCtr))
   
   protected def getBytes(from:Int, to:Int) = (from to to).map(i => bytes(i))
   
@@ -27,8 +27,8 @@ abstract class AbstractParser(bytes:Array[Byte]) {
   
   // signed. NOTE: uses direct byte conversion to signed number
   def getNext4SInt = getSInt4LittleEndian(getNextBytes(4).toArray)
-  
-  def getCompactInt = { 
+
+  def getCompactInt = {
     val ctr = getAndIncrCtr
     val nextNumBytes = bytes(ctr) & 0xFF match {
       case 0xff => 8 // next four bytes encode size
