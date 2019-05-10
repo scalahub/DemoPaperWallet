@@ -28,30 +28,30 @@ CryptoNode is a cryptocurrency library written in Scala. It can be used for impl
   - Listen for blocks and transactions
   - Broadcast transaction
 
-## Future additions planned
+The following are planned in a future release:
 
-- ZCash with t-address
 - Bech32 addresses
+- ZCash t-addresses
 
 ## Usage 
 Please refer to the tests for example usage:
 https://github.com/scalahub/CryptoNode/tree/master/src/test/scala/org/sh/cryptonode
-#### Connecting to the network
+#### Connecting to the Network
 
 From the [TestPeer](https://github.com/scalahub/CryptoNode/blob/master/src/test/scala/org/sh/cryptonode/TestPeer.scala "TestPeer") example: 
 ```scala
-val useMainNet = true // set to true for main net (default)
+val useMainNet = false // set to true for main net (default)
 val node = new org.sh.cryptonode.btc.BitcoinSNode(useMainNet)
 ```
-#### Listening for transactions and blocks
+#### Listening for Transactions and Blocks
+Once a node is created, here is how we can add handlers for listening to transactions and blocks.
 ```scala
-// once a node is created, here is how we can add handlers for events (block or tx received)
 node.addOnTxHandler("myTxHandler", tx => println(s"new transaction with id $tx"))
 node.addOnBlkHandler("myBlkHandler", blk => println(s"new block with id $blk"))
 ```
-#### Creating transactions
+#### Creating Transactions
 
-The following code (based on the [TestTx example](https://github.com/scalahub/CryptoNode/blob/master/src/test/scala/org/sh/cryptonode/TestPeer.scala "TestTx example")) shows how how to create mixed transactions, i.e., having both SegWit and ordinary inputs: 
+The following code (based on the [TestTx example](https://github.com/scalahub/CryptoNode/blob/master/src/test/scala/org/sh/cryptonode/TestPeer.scala "TestTx example")) shows how how to create a transaction having both SegWit and non-SegWit inputs: 
 ```scala
 val useMainNet = false // mainnet is false
 
