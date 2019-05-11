@@ -45,7 +45,7 @@ lazy val root = (project in file(".")).aggregate(core,bch,wallet,bitcoind).setti
 	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.BitcoinsNode"),
 	name := "CryptoNode"
 ).dependsOn(
-  core,bch,wallet,bitcoind
+	core,bch,wallet,bitcoind
 )
 
 Project.inConfig(Test)(baseAssemblySettings)

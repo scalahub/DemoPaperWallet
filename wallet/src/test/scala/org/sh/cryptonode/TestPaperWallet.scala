@@ -6,82 +6,89 @@ import org.sh.cryptonode.ecc.ECCPrvKey
 import org.sh.cryptonode.util.HashUtil
 
 object TestPaperWallet {
-  /* INSTRUCTIONS TO RUN: 
-   *   First create a fat jar using sbt
-   *     sbt_prompt> test:assemble
-   *   This will create a jar target/scala-2.12/CryptoNode-assembly-0.1.jar 
-   *   Then run the jar as follows:
-   *     java -cp target/scala-2.12/CryptoNode-assembly-0.1.jar org.sh.cryptonode.PaperWallet -a topSecretSeed 2022 correct horse battery staple
-   *  
-   *   (In the above command, the seed is topSecretSeed, the start index is 2022 and the words are correct horse battery staple)
-   */
-  /* EXPERIMENTAL WALLET: Do not use for storing real funds. Use only for testnet coins.
-   * Takes as input:
-   * 1. Option to output ordinary address (-a), segwit address (-s) or private key (-p)
-   * 3. Seed
-   * 3. Start index
-   * 4. sequence of words
-   *
-   * WARNING: DO NOT USE SEGWIT ADDRESSES FOR STORING BCH
-   *
-   * Outputs 10 addresses of private keys generated from the words starting from index
-   * Example:
-   *    java -cp <jar_path> -a topSecretSeed 2022 correct horse battery staple
-   *
-   *    gives addresses from 2022 to 2031 using the words correct horse battery staple and seed topSecretSeed
-   *
-   * In order to recover the keys, the seed, the index and the words are needed
-   *
-   */
-  def hash(bytes:Array[Byte]) = HashUtil.sha256Bytes2Bytes(bytes)
-  def main(args:Array[String]):Unit = {
-    if (args.size < 4) {
-      println(
-        """
-Usage java -cp <jar> org.sh.cryptonode.PaperWallet <option> <seed> <start index> <word1> <word2> ...
-<option> can be one of -a, -s or -p denoting ordinary address, segwit address or private key respectively.
-<seed> is any secret string used to initialized the wallet. Keep it long
-<start index> is a BigInteger denoting the starting index for generating the next 10 addresses
-<word1>, <word2> ... is an unlimited sequence of words. Use at least 10 for strong security.
+  val addrsStr = """
+      |2022: 1McvjGTP2uBntgYwGSYqqHWU2i7zXfiBjw
+      |2023: 185KySbAAdGMdkQW4qg9TXRiBMJeKuo661
+      |2024: 17pxVG52jUkQWzTXL16Sy81HeFmX9W3ogt
+      |2025: 1P9hvyjzfeuhRi8YqjSYCGBRbEWaBdZR5B
+      |2026: 18eJ57ZUYDvETGptrjbyhoo1dULBop7VvR
+      |2027: 1CCQnjyvpQbBrScfJV5EZyX9rs3o31Fvbs
+      |2028: 14Pbww48aTbSnmx5sx71juHwJohrajNRh8
+      |2029: 18LfwbbiypEbSMmso4VWbbpmRGPe8RSpbM
+      |2030: 1LjyajcExYecXePXYqqWWion7WqWVDR37j
+      |2031: 1LRem3VS8ThAy4hP8QkSYfeW5zqDJmvkjU
+    """.stripMargin
+  val segAddrsStr =
+    """
+      |2022: 33uqHrHJRkSXeYNJPoQdZ4Vxe3vS9zpjaS
+      |2023: 3Kn3rRFAJmF84jkoQWjxBC6H7FrQkkHrbP
+      |2024: 39kLVQS5E6jcTTXtLCCzWEKUGpRRs3aZBh
+      |2025: 3DVUZqMVJSYZjFTY5LGiG77dpf5XwCER67
+      |2026: 3PXz4wUhLTZsZMk3pnxFM9PEX4hwTrn5cc
+      |2027: 3K5PkFxAZ2PXesFpG4dt6tnkqLmkD1hTLc
+      |2028: 3HAdjW2ti1oB3hc5tr3hBmSjM6iJvGeBW1
+      |2029: 36dPA4rqHe4ai6h7XVXVbWyfbzAVkvfumC
+      |2030: 38bUuVTthVNYPVMnFpuzhofhwLw8sYC4kb
+      |2031: 3HXMUWxzbRynwHtRVJPQxMLtGBtEzfqVcq
+    """.stripMargin
+  val keysStr =
+    """
+      |2022: L3yU5wUrsYa6nM6FnRdEQKWDGzt54DuejUi66xpg3U6y8XAieDxP
+      |2023: KxKSYUSsxConUth7pWMx7b8Te5zfJeQaUBKaWyMNVWhXKUoptUWh
+      |2024: KzL1h4D1wYf5k3CFAGjKjC8npPaBjgyijta76SVWmrMon9pXYGZL
+      |2025: KxWv5cz89HrWUeo9DzjV5AZDgJ2nvRipVaXjjuyRSjh3irVWLUW4
+      |2026: L1diHrDBEQvFTBarxymcUoFioLmvqpJck3fXJzaaraTkQXuqnWbz
+      |2027: L5Aj4BkZGihQubKwJLtFFnGx7xWgK7oTeH7MzbrNGQUXr9EqtiyP
+      |2028: KyvSYjoCbzc95sLWc3RgDrJMznmr4uDckFchaEPHeofUQDLBEdat
+      |2029: KwxYEYigKdB8mvBrUe82rVF2PhMvY8oAuFY6k5HccriBy3BRnGF4
+      |2030: L5XiAd9KSff1MfTPVeDmtn7qp6uMRjNtCwTbZezDfKtaecPxYJW6
+      |2031: Kz1L7QLG1fcb89DFUtW2nj9SWzoZcNbYL3LyStRb6cTbvV8DUAcT
+    """.stripMargin
 
-Example: java -cp <jarPath> org.sh.cryptonode.PaperWallet -a topSecretSeed 2022 correct horse battery staple
-This will output will output addresses from 2022 to 2031 using the words: correct horse battery staple and the seed: topSecretSeed
-""")
-    } else {
-      val opt = args(0).toLowerCase
-      val isCompressed = true
-      val isMainNet = true
 
-      val fn = opt match {
-        case "-s" => i:BigInt => new PrvKey_P2SH_P2WPKH(i, isCompressed).pubKey.address
-        case "-a" => i:BigInt => new PrvKey_P2PKH(new ECCPrvKey(i, isCompressed), isMainNet).pubKey.address
-        case "-p" => i:BigInt =>
-          //new PrvKey_P2SH_P2WPKH(i, isCompressed).getWIF // should output same as below
-          new PrvKey_P2PKH(new ECCPrvKey(i, isCompressed), isMainNet).getWIF
-        case any => throw new Exception("Unknown option. Must be -a, -s or -p")
-      }
-
-      val seed = args(1)
-      if (seed.size < 10) throw new Exception("Seed must be at least 10 chars")
-      val index = BigInt(args(2))
-      val words = args.drop(3).map(_.getBytes("UTF-16"))
-
-      val numWords = words.size
-      if (numWords < 2) throw new Exception("At least two words are required")
-      var tmp = hash(words(1) ++ seed.getBytes("UTF-16"))
-      val numIter = words.size * 193
-
-      1 to numIter foreach{i =>
-        tmp = hash(words(i % numWords) ++ hash(tmp))
-      }
-      words.reverse.foreach{w =>
-        tmp = hash(hash(w) ++ tmp)
-      }
-      0 to 9 foreach{i =>
-        val int = i + index
-        println(int + ": " +fn(BigInt(hash(tmp ++ int.toByteArray)).mod(org.sh.cryptonode.ecc.Util.n)))
+  case class OutRow(i:Int, s:String) {
+    override def toString = s"$i: $s"
+  }
+  def split(s:String) = s.lines.map(_.trim).filterNot(_.isEmpty).map(x => x.split(":").map(_.trim)).toArray.map(x =>
+    OutRow(x(0).toInt, x(1))
+  )
+  def identical(left:Array[OutRow], right:Array[OutRow]) =
+    left.size == right.size && {(left zip right).forall {
+        case (l, r) => l.i == r.i && l.s == r.s
       }
     }
+  val (addrs, segAddrs, keys) = (split(addrsStr), split(segAddrsStr), split(keysStr))
+
+  def main(args:Array[String]):Unit = {
+    val seed = "topSecretSeed"
+    val index = "2022"
+    val words = Array("correct", "horse", "battery", "staple")
+    val params = Array(seed, index) ++ words
+
+    // -p topSecretSeed 2022 correct horse battery staple
+
+    // test 1
+    // https://stackoverflow.com/a/27690387/243233
+    val os1 = new java.io.ByteArrayOutputStream
+    Console.withOut(os1) {PaperWallet.main(Array("-a")++params)}
+    os1.close()
+    val out1 = split(os1.toString("UTF-8"))
+    assert(identical(out1, addrs), "address mismatch")
+
+    // test 2
+    val os2 = new java.io.ByteArrayOutputStream
+    Console.withOut(os2) {PaperWallet.main(Array("-s")++params)}
+    os2.close()
+    val out2 = split(os2.toString("UTF-8"))
+    assert(identical(out2, segAddrs), "segwit-address mismatch")
+
+    // test 3
+    val os3 = new java.io.ByteArrayOutputStream
+    Console.withOut(os3) {PaperWallet.main(Array("-p")++params)}
+    os3.close()
+    val out3 = split(os3.toString("UTF-8"))
+    assert(identical(out3, keys), "key mismatch")
+    println("All wallet tests passed")
   }
 }
 
