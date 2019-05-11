@@ -29,8 +29,8 @@ lazy val bitcoind = (project in file("bitcoind")).dependsOn(core).settings(
 	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.bitcoind.BitcoindTxParserTest")
 )
 
-lazy val wallet = (project in file("wallet")).dependsOn(core).settings(
-	name := "wallet",
+lazy val paperwallet = (project in file("paperwallet")).dependsOn(core).settings(
+	name := "paperwallet",
 	mainClass in (Test, run) := Some("org.sh.cryptonode.TestPaperWallet"),
 	mainClass in (Compile, run) := Some("org.sh.cryptonode.PaperWallet")
 )
@@ -41,11 +41,11 @@ lazy val bch = (project in file("bch")).dependsOn(core).settings(
 	mainClass in (Test, run) := Some("org.sh.cryptonode.bch.TestUAHF")
 )
 
-lazy val root = (project in file(".")).aggregate(core,bch,wallet,bitcoind).settings(
+lazy val root = (project in file(".")).aggregate(core,bch,paperwallet,bitcoind).settings(
 	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.BitcoinsNode"),
 	name := "CryptoNode"
 ).dependsOn(
-	core,bch,wallet,bitcoind
+	core,bch,paperwallet,bitcoind
 )
 
 Project.inConfig(Test)(baseAssemblySettings)
