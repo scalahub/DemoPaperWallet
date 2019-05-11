@@ -4,25 +4,48 @@ version := "0.1"
 
 scalaVersion := "2.12.8"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.8"
+lazy val core = (project in file("core")).settings(
+	libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.8",
 
-libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.6"
+	libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
 
-// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-libraryDependencies += "org.bouncycastle" % "bcprov-jdk15on" % "1.61"
+	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
+	libraryDependencies += "org.bouncycastle" % "bcprov-jdk15on" % "1.61",
 
-libraryDependencies += "commons-codec" % "commons-codec" % "1.12"
+	libraryDependencies += "commons-codec" % "commons-codec" % "1.12",
 
-// https://mvnrepository.com/artifact/commons-io/commons-io
-libraryDependencies += "commons-io" % "commons-io" % "2.6"
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	libraryDependencies += "commons-io" % "commons-io" % "2.6",
 
-// https://mvnrepository.com/artifact/org.json/json
-libraryDependencies += "org.json" % "json" % "20140107"
+	// https://mvnrepository.com/artifact/org.json/json
+	libraryDependencies += "org.json" % "json" % "20140107",
+	libraryDependencies += "org.bitcoinj" % "bitcoinj-core" % "0.14.7" % Test,
+	name := "core",
+	mainClass in (Test, run) := Some("org.sh.cryptonode.RunStandAloneTests")
+)
 
-// TESTING LIBS
-// https://mvnrepository.com/artifact/org.bitcoinj/bitcoinj-core
-libraryDependencies += "org.bitcoinj" % "bitcoinj-core" % "0.14.7" % Test
+lazy val bitcoind = (project in file("bitcoind")).dependsOn(core).settings(
+	name := "bitcoind",
+	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.bitcoind.BitcoindTxParserTest")
+)
 
-// https://stackoverflow.com/a/34910525/243233
+lazy val wallet = (project in file("wallet")).dependsOn(core).settings(
+	name := "wallet",
+	mainClass in (Test, run) := Some("org.sh.cryptonode.TestPaperWallet"),
+	mainClass in (Compile, run) := Some("org.sh.cryptonode.PaperWallet")
+)
+
+lazy val bch = (project in file("bch")).dependsOn(core).settings(
+	// set the name of the project
+	name := "bch",
+	mainClass in (Test, run) := Some("org.sh.cryptonode.bch.TestUAHF")
+)
+
+lazy val root = (project in file(".")).aggregate(core,bch,wallet,bitcoind).settings(
+	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.BitcoinsNode"),
+	name := "CryptoNode"
+).dependsOn(
+  core,bch,wallet,bitcoind
+)
+
 Project.inConfig(Test)(baseAssemblySettings)
-// assemblyJarName in (Test, assembly) := s"${name.value}-test-${version.value}.jar"

@@ -1,0 +1,8 @@
+package org.sh.cryptonode.bch
+
+object BitcoinCashPrvKey {
+  def getPrvKeyP2PKH_UAHF(wif:String) = {
+    val (eccPrvKey, mainNet) = getECCPrvKeyAndNet(wif)
+    new PrvKey_P2PKH_UAHF(eccPrvKey, mainNet)
+  }
+}
