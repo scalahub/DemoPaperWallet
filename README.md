@@ -38,7 +38,7 @@ Please refer to the tests for example usage:
 https://github.com/scalahub/CryptoNode/tree/master/core/src/test/scala/org/sh/cryptonode
 #### Connecting to the Network
 
-From the [TestPeer](https://github.com/scalahub/CryptoNode/blob/master/core/src/test/scala/org/sh/cryptonode/TestPeer.scala "TestPeer") example: 
+From the [TestBitcoinPeer](https://github.com/scalahub/CryptoNode/blob/master/src/test/scala/org/sh/cryptonode/btc/TestBitcoinPeer.scala "TestBitcoinPeer") example: 
 ```scala
 val useMainNet = false // set to true for main net (default)
 val node = new org.sh.cryptonode.btc.BitcoinSNode(useMainNet)
