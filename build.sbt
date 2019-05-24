@@ -42,7 +42,7 @@ lazy val bch = (project in file("bch")).dependsOn(core).settings(
 )
 
 lazy val root = (project in file(".")).aggregate(core,bch,paperwallet,bitcoind).settings(
-	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.BitcoinsNode"),
+	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.TestBitcoinPeer"),
 	name := "CryptoNode"
 ).dependsOn(
 	core,bch,paperwallet,bitcoind

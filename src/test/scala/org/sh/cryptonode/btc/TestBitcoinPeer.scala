@@ -1,10 +1,9 @@
-package org.sh.cryptonode
+package org.sh.cryptonode.btc
 
 import org.sh.cryptonode.btc.BitcoinS._
-import org.sh.cryptonode.btc._
 import org.sh.cryptonode.net._
 
-object TestPeer extends App {
+object TestBitcoinPeer extends App {
   isMainNet = true // set to true for main net (default)
   // Peer.debug = false // prints a lot of info
   Peer.debug = true // prints a lot of info
