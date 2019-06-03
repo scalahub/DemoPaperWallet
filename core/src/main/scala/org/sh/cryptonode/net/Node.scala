@@ -21,9 +21,9 @@ trait Node extends EventListener {
       testnet3	0x0709110B	0B 11 09 07
       namecoin	0xFEB4BEF9	F9 BE B4 FE   
       bitcoinABC  e3:e1:f3:e8   */   
-  val system = ActorSystem(s"PeerGroup$id")  
+  lazy val system = ActorSystem(s"PeerGroup$id")
 
-  val peerGroup = system.actorOf(
+  lazy val peerGroup = system.actorOf(
     PeerGroup.props(
       this, PeerGroupConfig(version, userAgent, serviceBit, magicBytes)
     ), name = s"PeerGroup$id"
