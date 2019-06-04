@@ -57,7 +57,7 @@ object TestPaperWallet {
         case (l, r) => l.i == r.i && l.s == r.s
       }
     }
-  val (addrs, segAddrs, keys) = (split(addrsStr), split(segAddrsStr), split(keysStr))
+  val (addrs, segAddrs, keys):(Array[OutRow], Array[OutRow], Array[OutRow]) = (split(addrsStr), split(segAddrsStr), split(keysStr))
 
   def main(args:Array[String]):Unit = {
     val seed = "topSecretSeed"
