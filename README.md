@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/scalahub/CryptoNode.svg?branch=master)](https://travis-ci.org/scalahub/CryptoNode)
 # CryptoNode
 
 CryptoNode is a cryptocurrency library written in Scala. It can be used for implementing nodes and wallets. It supports SPV mode out of the box and can be converted to a full node by implementing the core consensus rules and the execution engine. It supports the Secp256k1 elliptic curve used in Bitcoin and its forks. 
@@ -38,7 +39,7 @@ Please refer to the tests for example usage:
 https://github.com/scalahub/CryptoNode/tree/master/core/src/test/scala/org/sh/cryptonode
 #### Connecting to the Network
 
-From the [TestPeer](https://github.com/scalahub/CryptoNode/blob/master/core/src/test/scala/org/sh/cryptonode/TestPeer.scala "TestPeer") example: 
+From the [TestBitcoinPeer](https://github.com/scalahub/CryptoNode/blob/master/src/test/scala/org/sh/cryptonode/btc/TestBitcoinPeer.scala "TestBitcoinPeer") example: 
 ```scala
 val useMainNet = false // set to true for main net (default)
 val node = new org.sh.cryptonode.btc.BitcoinSNode(useMainNet)
