@@ -1,14 +1,15 @@
 package org.sh.cryptonode
 
-import org.sh.cryptonode.btc._
-import org.sh.cryptonode.ecc._
-import org.sh.cryptonode.ecc.Util._
-import org.sh.cryptonode.btc.BitcoinUtil._
-import org.sh.cryptonode.util.BytesUtil._
-import org.sh.cryptonode.util.StringUtil._
-import org.sh.cryptonode.util.BigIntUtil._
 import org.sh.cryptonode.btc.BitcoinS._
+import org.sh.cryptonode.btc._
+import org.sh.cryptonode.ecc.Util._
+import org.sh.cryptonode.ecc._
+import org.sh.cryptonode.util.BigIntUtil._
+import org.sh.cryptonode.util.BytesUtil._
 import org.sh.cryptonode.util.HashUtil._
+import org.sh.cryptonode.util.StringUtil._
+
+import scala.collection.JavaConverters._
 
 object TestKeyRecovery extends App {
   TestKeyRecovery1
@@ -136,7 +137,7 @@ object TestKeyRecovery4 {
     # 038537DAE07F5B54821726EB5C11563054C5D88FCBD40B63399C84C4EB4BA19638"""
   
   Seq(tv1, tv2, tv3).map{tv =>
-    val lines = tv.lines.map(_.trim).filterNot(_.isEmpty).toArray  // remove empty lines
+    val lines = tv.lines.iterator().asScala.map(_.trim).filterNot(_.isEmpty).toArray  // remove empty lines
     val msg = lines(0).drop("message       = ".size)
     val sig = lines(3).drop("DER signature = ".size)
     val (r, s) = decodeDERSig(sig)

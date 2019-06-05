@@ -1,11 +1,12 @@
 
 package org.sh.cryptonode
 
-import org.sh.cryptonode.ecc._
 import org.sh.cryptonode.ecc.Util._
-import org.sh.cryptonode.util.BytesUtil._
-import org.sh.cryptonode.util.StringUtil._
+import org.sh.cryptonode.ecc._
 import org.sh.cryptonode.util.BigIntUtil._
+import org.sh.cryptonode.util.BytesUtil._
+
+import scala.collection.JavaConverters._
 
 object TestECC extends App {
   // generate random keys
@@ -46,7 +47,7 @@ object TestECC extends App {
     try {f; assert(false) } catch { case a:Any => assert(a.getClass == e) }
   
   def testTvs(s:String, hexKey:Boolean) = {
-    s.lines.map(_.trim).filterNot(_.isEmpty).grouped(3).toArray.map{a =>
+    s.lines.iterator.asScala.map(_.trim).filterNot(_.isEmpty).grouped(3).toArray.map{a =>
       val k = a(0).drop("k = ".size).trim
       val x = a(1).drop("x = ".size).trim
       val y = a(2).drop("y = ".size).trim

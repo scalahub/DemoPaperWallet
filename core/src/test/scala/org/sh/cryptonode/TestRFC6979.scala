@@ -1,12 +1,13 @@
 package org.sh.cryptonode
 
-//import org.sh.cryptonode.btc.BitcoinS
 import org.sh.cryptonode.btc._
 import org.sh.cryptonode.ecc._
-import org.sh.cryptonode.util.BytesUtil._
-import org.sh.cryptonode.util.StringUtil._
 import org.sh.cryptonode.util.BigIntUtil._
+import org.sh.cryptonode.util.BytesUtil._
 import org.sh.cryptonode.util.HashUtil._
+
+import scala.collection.JavaConverters._
+
 
 object TestVectorsRFC6979 {
   //Haskoin test vectors for RFC 6979 ECDSA (secp256k1, SHA-256)"
@@ -111,7 +112,7 @@ object TestVectorsRFC6979 {
   )
 }
 
-import TestVectorsRFC6979._
+import org.sh.cryptonode.TestVectorsRFC6979._
 object TestRFC6979 extends App {
   // test vectors 1
   //tvs.map(tv => new PrvKey(tv.key, true).sign(tv.msg))
@@ -131,8 +132,6 @@ object TestRFC6979 extends App {
   }
   println("All RFC6979 test vectors set #1 passed")
 }
-import org.sh.cryptonode.ecc.Util._
-import org.sh.cryptonode.util._
 object Generate_RFC6979_TestVectors extends App {
   val msgs = """Absence makes the heart grow fonder.
 Actions speak louder than words.
@@ -364,7 +363,7 @@ You get what you pay for.
 You can't win them all.
 You have to break a few eggs to make an omlette.
 You have to take the good  with the bad.
-You win some, you lose some.""".lines.map(_.trim).toArray
+You win some, you lose some.""".lines.iterator().asScala.map(_.trim).toArray
   val keys1 = (1 to msgs.size).map{i =>
     new ECCPrvKey(i, true)
   }.toArray
@@ -388,7 +387,7 @@ object Validate_RFC6979_TestVectors extends App {
   val tvs = Seq(tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, tv10, tv11, tv12)
   val x = tvs.flatMap{tv => 
     print(".")
-    tv.lines.map{line =>
+    tv.lines.iterator().asScala.map{line =>
       val a = line.split(",")
       val k = BigInt(a(0).drop(1))
       val s = a.last.dropRight(1).toLowerCase

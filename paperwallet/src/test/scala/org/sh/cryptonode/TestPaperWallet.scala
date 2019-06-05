@@ -5,6 +5,8 @@ import org.sh.cryptonode.btc.PrvKey_P2SH_P2WPKH
 import org.sh.cryptonode.ecc.ECCPrvKey
 import org.sh.cryptonode.util.HashUtil
 
+import scala.collection.JavaConverters._
+
 object TestPaperWallet {
   val addrsStr = """
       |2022: 1McvjGTP2uBntgYwGSYqqHWU2i7zXfiBjw
@@ -49,7 +51,7 @@ object TestPaperWallet {
   case class OutRow(i:Int, s:String) {
     override def toString = s"$i: $s"
   }
-  def split(s:String) = s.lines.map(_.trim).filterNot(_.isEmpty).map(x => x.split(":").map(_.trim)).toArray.map(x =>
+  def split(s:String) = s.lines.iterator().asScala.map(_.trim).filterNot(_.isEmpty).map(x => x.split(":").map(_.trim)).toArray.map(x =>
     OutRow(x(0).toInt, x(1))
   )
   def identical(left:Array[OutRow], right:Array[OutRow]) =

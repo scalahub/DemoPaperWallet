@@ -1,15 +1,13 @@
 
 package org.sh.cryptonode
 
-import org.sh.cryptonode.ecc._
 import org.sh.cryptonode.btc._
 import org.sh.cryptonode.ecc.Util._
-import org.sh.cryptonode.btc.BitcoinUtil._
-import org.sh.cryptonode.util.BytesUtil._
-import org.sh.cryptonode.util.StringUtil._
-import org.sh.cryptonode.util.BigIntUtil._
+import org.sh.cryptonode.ecc._
 import org.sh.cryptonode.util.HashUtil._
-import org.sh.cryptonode.btc.BitcoinS._
+import org.sh.cryptonode.util.StringUtil._
+
+import scala.collection.JavaConverters._
 
 object TestCompressedPubKey extends App {
   /*  https://bitcoin.stackexchange.com/a/22881/2075 
@@ -114,7 +112,8 @@ MySig: IAjLYjtaScVd1haZiSfnDS/yQyy1RUXpB/Yug9YHaiaKLXI8ihHe3PGDZB2YIAJP6ivfpwBXr
 """
   val compressed = true
   val mainNet = true
-  val testStrs = str.lines.map(_.trim).filterNot(_.isEmpty).grouped(5)
+  // val testStrs = str.lines.map(_.trim).toArray.filterNot(_.isEmpty).grouped(5)
+  val testStrs = str.lines.iterator().asScala.map(s => s.trim).filterNot(_.isEmpty).grouped(5)
   testStrs.foreach{seq =>
     print(".")
     val _prvKeyInt = seq(0).drop("Private as int ".size).trim
