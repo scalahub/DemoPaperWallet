@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.12.8"
 
-lazy val core = (project in file("core")).settings(
+lazy val btc = (project in file("btc")).settings(
 	libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.8",
 
 	libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
@@ -20,32 +20,32 @@ lazy val core = (project in file("core")).settings(
 	// https://mvnrepository.com/artifact/org.json/json
 	libraryDependencies += "org.json" % "json" % "20140107",
 	libraryDependencies += "org.bitcoinj" % "bitcoinj-core" % "0.14.7" % Test,
-	name := "core",
+	name := "btc",
 	mainClass in (Test, run) := Some("org.sh.cryptonode.RunStandAloneTests")
 )
 
-lazy val bitcoind = (project in file("bitcoind")).dependsOn(core).settings(
+lazy val bitcoind = (project in file("bitcoind")).dependsOn(btc).settings(
 	name := "bitcoind",
 	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.bitcoind.BitcoindTxParserTest")
 )
 
-lazy val paperwallet = (project in file("paperwallet")).dependsOn(core).settings(
+lazy val paperwallet = (project in file("paperwallet")).dependsOn(btc).settings(
 	name := "paperwallet",
 	mainClass in (Test, run) := Some("org.sh.cryptonode.TestPaperWallet"),
 	mainClass in (Compile, run) := Some("org.sh.cryptonode.PaperWallet")
 )
 
-lazy val bch = (project in file("bch")).dependsOn(core).settings(
+lazy val bch = (project in file("bch")).dependsOn(btc).settings(
 	// set the name of the project
 	name := "bch",
 	mainClass in (Test, run) := Some("org.sh.cryptonode.bch.TestUAHF")
 )
 
-lazy val root = (project in file(".")).aggregate(core,bch,paperwallet,bitcoind).settings(
+lazy val root = (project in file(".")).aggregate(btc,bch,paperwallet,bitcoind).settings(
 	mainClass in (Test, run) := Some("org.sh.cryptonode.btc.TestBitcoinPeer"),
 	name := "CryptoNode"
 ).dependsOn(
-	core,bch,paperwallet,bitcoind
+	btc,bch,paperwallet,bitcoind
 )
 
 Project.inConfig(Test)(baseAssemblySettings)
