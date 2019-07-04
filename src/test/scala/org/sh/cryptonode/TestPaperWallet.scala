@@ -1,11 +1,6 @@
 package org.sh.cryptonode
 
-import org.sh.cryptonode.btc.PrvKey_P2PKH
-import org.sh.cryptonode.btc.PrvKey_P2SH_P2WPKH
-import org.sh.cryptonode.ecc.ECCPrvKey
-import org.sh.cryptonode.util.HashUtil
-
-import scala.collection.JavaConverters._
+import org.sh.cryptonode.PaperWalletWrapper.OutRow
 
 object TestPaperWallet {
   val addrsStr = """
@@ -47,50 +42,29 @@ object TestPaperWallet {
       |2031: Kz1L7QLG1fcb89DFUtW2nj9SWzoZcNbYL3LyStRb6cTbvV8DUAcT
     """.stripMargin
 
-
-  case class OutRow(i:Int, s:String) {
-    override def toString = s"$i: $s"
-  }
-  def split(s:String) = s.lines.iterator().asScala.map(_.trim).filterNot(_.isEmpty).map(x => x.split(":").map(_.trim)).toArray.map(x =>
-    OutRow(x(0).toInt, x(1))
-  )
   def identical(left:Array[OutRow], right:Array[OutRow]) =
     left.size == right.size && {(left zip right).forall {
         case (l, r) => l.i == r.i && l.s == r.s
       }
     }
-  val (addrs, segAddrs, keys):(Array[OutRow], Array[OutRow], Array[OutRow]) = (split(addrsStr), split(segAddrsStr), split(keysStr))
+  import PaperWalletWrapper._
+  val (addrs, segAddrs, keys):(Array[OutRow], Array[OutRow], Array[OutRow]) = ($split(addrsStr), $split(segAddrsStr), $split(keysStr))
 
   def main(args:Array[String]):Unit = {
     val seed = "topSecretSeed"
-    val index = "2022"
+    val index = 2022
     val words = Array("correct", "horse", "battery", "staple")
-    val params = Array(seed, index) ++ words
 
-    // -p topSecretSeed 2022 correct horse battery staple
-
+    // command usage java -jar <jar> -p topSecretSeed 2022 correct horse battery staple
     // test 1
-    // https://stackoverflow.com/a/27690387/243233
-    val os1 = new java.io.ByteArrayOutputStream
-    Console.withOut(os1) {PaperWallet.main(Array("-a")++params)}
-    os1.close()
-    val out1 = split(os1.toString("UTF-8"))
-    assert(identical(out1, addrs), "address mismatch")
+    assert(identical(PaperWalletWrapper.getAddr(seed, index, words), addrs), "address mismatch")
 
     // test 2
-    val os2 = new java.io.ByteArrayOutputStream
-    Console.withOut(os2) {PaperWallet.main(Array("-s")++params)}
-    os2.close()
-    val out2 = split(os2.toString("UTF-8"))
-    assert(identical(out2, segAddrs), "segwit-address mismatch")
+    assert(identical(PaperWalletWrapper.getSegWitAddress(seed, index, words), segAddrs), "segwit-address mismatch")
 
     // test 3
-    val os3 = new java.io.ByteArrayOutputStream
-    Console.withOut(os3) {PaperWallet.main(Array("-p")++params)}
-    os3.close()
-    val out3 = split(os3.toString("UTF-8"))
-    assert(identical(out3, keys), "key mismatch")
-    println("All wallet tests passed")
+    assert(identical(PaperWalletWrapper.getPrvKey(seed, index, words), keys), "key mismatch")
+    println("All PaperWalletWrapper tests passed")
   }
 }
 
