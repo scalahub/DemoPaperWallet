@@ -24,7 +24,7 @@ object PaperWalletWrapper {
     val params = Array(seed, index.toString) ++ words
     $split($usingOs(PaperWallet.main(Array(command)++params)))
   }
-  def getAddr(seed:String, index:Int, words:Array[String]) = {
+  def getAddress(seed:String, index:Int, words:Array[String]) = {
     $get("-a")(seed:String, index:Int, words:Array[String])
   }
   def getSegWitAddress(seed:String, index:Int, words:Array[String]) = {

@@ -57,7 +57,7 @@ object TestPaperWallet {
 
     // command usage java -jar <jar> -p topSecretSeed 2022 correct horse battery staple
     // test 1
-    assert(identical(PaperWalletWrapper.getAddr(seed, index, words), addrs), "address mismatch")
+    assert(identical(PaperWalletWrapper.getAddress(seed, index, words), addrs), "address mismatch")
 
     // test 2
     assert(identical(PaperWalletWrapper.getSegWitAddress(seed, index, words), segAddrs), "segwit-address mismatch")
