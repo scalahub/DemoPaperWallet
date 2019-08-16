@@ -1,9 +1,7 @@
+lazy val PaperWallet = RootProject(uri("git://github.com/scalahub/PaperWallet.git"))
+//lazy val PaperWallet = RootProject(uri("../PaperWallet"))
 
-lazy val CryptoNode = RootProject(uri("git://github.com/scalahub/CryptoNode.git"))
-//lazy val CryptoNode = RootProject(uri("../CryptoNode"))
-
-lazy val root = (project in file(".")).dependsOn(CryptoNode).settings(
-  name := "PaperWallet",
-  mainClass in (Test, run) := Some("org.sh.cryptonode.TestPaperWallet"),
-  mainClass in (Compile, run) := Some("org.sh.cryptonode.PaperWallet")
+lazy val root = (project in file(".")).dependsOn(PaperWallet).settings(
+  name := "DemoPaperWallet",
+  mainClass in (Compile, run) := Some("org.sh.cryptonode.DemoPaperWallet")
 )
