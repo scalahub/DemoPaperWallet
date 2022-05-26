@@ -1,7 +1,9 @@
-lazy val PaperWallet = RootProject(uri("git://github.com/scalahub/PaperWallet.git"))
-//lazy val PaperWallet = RootProject(uri("../PaperWallet"))
+resolvers += "SonaType Snapshots s01" at "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
-lazy val root = (project in file(".")).dependsOn(PaperWallet).settings(
-  name := "DemoPaperWallet",
-  mainClass in (Compile, run) := Some("org.sh.cryptonode.DemoPaperWallet")
-)
+libraryDependencies += "io.github.scalahub" %% "paperwallet" % "0.1.0-SNAPSHOT"
+
+lazy val root = (project in file("."))
+  .settings(
+    name := "DemoPaperWallet",
+    mainClass in (Compile, run) := Some("org.sh.cryptonode.DemoPaperWallet")
+  )
