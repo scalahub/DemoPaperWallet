@@ -1,6 +1,4 @@
-resolvers += "SonaType Snapshots s01" at "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
-libraryDependencies += "io.github.scalahub" %% "paperwallet" % "0.1.0-SNAPSHOT"
+libraryDependencies += "io.github.scalahub" %% "cryptogram" % "1.0"
 
 lazy val root = (project in file("."))
   .settings(
