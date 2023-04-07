@@ -2,11 +2,11 @@ package org.sh.cryptonode
 
 import org.sh.cryptonode.CryptogramWrapper.{$split, $usingOs}
 
-import scala.collection.JavaConverters._
-
 object DemoPaperWallet {
   def main(args: Array[String]) = {
-    print("Command [a]ddress or [s]egwit address or [p]private key: ")
+    print(
+      "Command [a](Ordinary Address) or [s](Segwit address) or [p](Private key): "
+    )
     val command = scala.io.StdIn.readLine
     print("Index (int): ")
     val index = BigInt(scala.io.StdIn.readLine)
