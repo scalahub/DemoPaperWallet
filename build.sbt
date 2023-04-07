@@ -1,6 +1,6 @@
 libraryDependencies += "io.github.scalahub" %% "cryptogram" % "1.1"
 
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "1.0"
 
 // resolvers += "Sonatype Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 
@@ -11,13 +11,14 @@ lazy val root = (project in file("."))
   )
 assembly / artifact := {
   val art = (assembly / artifact).value
-  art.withClassifier(Some("assembly"))
+  //  art.withClassifier(Some("assembly"))
+  art.withClassifier(None)
 }
 
 addArtifact(assembly / artifact, assembly)
 
-Compile / packageSrc / publishArtifact := false
-
-Compile / packageDoc / publishArtifact := false
-
+//Compile / packageSrc / publishArtifact := false
+//
+//Compile / packageDoc / publishArtifact := false
+//
 Compile / packageBin / publishArtifact := false
